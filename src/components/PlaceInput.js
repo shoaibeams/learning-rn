@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { View, TextInput, Button, StyleSheet } from 'react-native'
+import placeImage from '../../src/assets/hotspot-highlight-munich.png'
 
 class PlaceInput extends Component {
   state = {
-    placeName: ''
+    placeName: '',
+    placeImage
   }
 
   placeNameChangedHandler = val => {
@@ -17,7 +19,7 @@ class PlaceInput extends Component {
       return
     }
 
-    this.props.onPlaceAdded(this.state.placeName)
+    this.props.onPlaceAdded(this.state.placeName, this.state.placeImage)
   }
 
   render() {
@@ -45,7 +47,9 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: 30,
+    paddingLeft: 5
   },
   placeInput: {
     width: '70%'
