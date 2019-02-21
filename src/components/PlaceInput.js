@@ -15,11 +15,11 @@ class PlaceInput extends Component {
   }
 
   placeSubmitHandler = () => {
+    const { placeName, placeImage, key } = this.state
     if (this.state.placeName.trim() === '') {
       return
     }
-
-    this.props.onPlaceAdded(this.state.placeName, this.state.placeImage)
+    this.props.onPlaceAdded(placeName, placeImage, key)
   }
 
   render() {
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
     paddingTop: 30,
     paddingLeft: 5

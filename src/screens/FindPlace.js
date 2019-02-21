@@ -1,21 +1,26 @@
 import React, { Component } from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
-import { Ionicons } from '@expo/vector-icons'
+import { NavigationActions } from 'react-navigation'
 import * as actions from '../actions'
 import PlaceList from '../components/PlaceList'
 
 class FindPlace extends Component {
-  static navigationOptions = {
-    tabBarIcon: ({ tintColor }) => {
-      return <Ionicons name="md-locate" size={30} color={tintColor} />
-    }
+  itemSelectedHandler = (key, placeName) => {
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'details',
+      params: { key, placeName }
+    })
+    this.props.navigation.dispatch(navigateAction)
   }
 
   render() {
     return (
       <View>
-        <PlaceList places={this.props.places} />
+        <PlaceList
+          places={this.props.places}
+          onItemSelected={this.itemSelectedHandler}
+        />
       </View>
     )
   }

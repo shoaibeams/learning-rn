@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   listItem: {
     width: '100%',
     padding: 10,
-    paddingTop: 30,
+    paddingTop: 10,
     margin: 5,
     marginBottom: 5,
     backgroundColor: '#eee',

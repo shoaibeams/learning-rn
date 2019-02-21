@@ -12,8 +12,8 @@ class SharePlace extends Component {
     }
   }
 
-  placeAddedHandler = (placeName, placeImage) => {
-    this.props.addPlace(placeName, placeImage)
+  placeAddedHandler = (placeName, placeImage, key) => {
+    this.props.addPlace(placeName, placeImage, key)
   }
 
   render() {
@@ -24,8 +24,13 @@ class SharePlace extends Component {
     )
   }
 }
+const mapStateToProps = state => {
+  return {
+    places: state.placesReducer.places
+  }
+}
 
 export default connect(
-  null,
+  mapStateToProps,
   actions
 )(SharePlace)

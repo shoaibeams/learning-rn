@@ -1,11 +1,8 @@
 import React from 'react'
-import { createStore, compose, applyMiddleware } from 'redux'
+import { createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
 import reducers from './src/reducers'
-import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
-import AuthScreen from './src/screens/AuthScreen'
-import FindPlace from './src/screens/FindPlace'
-import SharePlace from './src/screens/SharePlace'
+import Home from './Home'
 
 let composeEnhancer = compose
 
@@ -15,27 +12,14 @@ if (__DEV__) {
 
 const store = createStore(reducers, composeEnhancer())
 
-export default class App extends React.Component {
+class App extends React.Component {
   render() {
-    console.log('object')
-    const MainNavigator = createBottomTabNavigator({
-      findPlace: {
-        screen: FindPlace,
-        navigationOptions: { title: 'Find Place' }
-      },
-      // auth: { screen: AuthScreen, navigationOptions: { title: 'Login' } },
-      sharePlace: {
-        screen: SharePlace,
-        navigationOptions: { title: 'Share Place' }
-      }
-    })
-
-    const AppContainer = createAppContainer(MainNavigator)
-
     return (
       <Provider store={store}>
-        <AppContainer />
+        <Home />
       </Provider>
     )
   }
 }
+
+export default App
