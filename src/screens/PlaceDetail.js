@@ -2,20 +2,33 @@ import React from 'react'
 import { Text, View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { Ionicons } from '@expo/vector-icons'
+import { deletePlace } from '../actions/index'
 
 class PlaceDetail extends React.Component {
+  state = { name: '', image: '' }
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: navigation.state.params.placeName
     }
   }
 
-  render() {
-    const key = this.props.navigation.state.params.key
-    const { image, name } = this.props.places.find(place => {
-      return place.key === key
-    })
+  placeDeletedHandler = () => {
+    this.props.deletePlace(this.props.navigation.state.params.key)
+    this.props.navigation.pop()
+  }
 
+  componentDidMount = () => {
+    const key = this.props.navigation.state.params.key
+    if (key) {
+      const { image, name } = this.props.places.find(place => {
+        return place.key === key
+      })
+      this.setState({ name, image })
+    }
+  }
+
+  render() {
+    const { name, image } = this.state
     return (
       <View style={styles.container}>
         <View>
@@ -23,7 +36,7 @@ class PlaceDetail extends React.Component {
           <Text style={styles.placeName}>{name}</Text>
         </View>
         <View>
-          <TouchableOpacity onPress={this.props.onItemDeleted}>
+          <TouchableOpacity onPress={this.placeDeletedHandler}>
             <View style={styles.deleteButton}>
               <Ionicons size={30} name="ios-trash" color="red" />
             </View>
@@ -60,5 +73,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  null
+  { deletePlace }
 )(PlaceDetail)

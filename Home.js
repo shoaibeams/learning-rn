@@ -3,16 +3,17 @@ import { Ionicons } from '@expo/vector-icons'
 import {
   createBottomTabNavigator,
   createStackNavigator,
-  createAppContainer
+  createAppContainer,
+  createDrawerNavigator
 } from 'react-navigation'
 
 import PlaceDetail from './src/screens/PlaceDetail'
 import SharePlace from './src/screens/SharePlace'
 import FindPlace from './src/screens/FindPlace'
+import SlideDrawer from './src/screens/SlideDrawer'
 
 class Home extends Component {
   render() {
-    console.log(this.props)
     const stack = createStackNavigator({
       places: {
         screen: FindPlace,
@@ -25,9 +26,20 @@ class Home extends Component {
       }
     })
 
+    const drawer = createDrawerNavigator(
+      {
+        SlideDrawer: { screen: stack }
+      },
+      {
+        contentComponent: SlideDrawer,
+        drawerWidth: 160
+      }
+    )
+
     const MainNavigator = createBottomTabNavigator({
       findPlace: {
         screen: stack,
+        screen: drawer,
         navigationOptions: {
           title: 'Places',
           tabBarIcon: ({ tintColor }) => {
@@ -43,13 +55,6 @@ class Home extends Component {
 
     AppContainer = createAppContainer(MainNavigator)
     return <AppContainer />
-  }
-}
-
-const mapStateToProps = state => {
-  return {
-    places: state.placesReducer.places,
-    key: state.placesReducer.key
   }
 }
 
