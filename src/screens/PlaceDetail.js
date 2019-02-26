@@ -38,7 +38,11 @@ class PlaceDetail extends React.Component {
         <View>
           <TouchableOpacity onPress={this.placeDeletedHandler}>
             <View style={styles.deleteButton}>
-              <Ionicons size={30} name="ios-trash" color="red" />
+              <Ionicons
+                size={30}
+                name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'}
+                color="red"
+              />
             </View>
           </TouchableOpacity>
         </View>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import {
   createBottomTabNavigator,
@@ -10,7 +11,8 @@ import {
 import PlaceDetail from './src/screens/PlaceDetail'
 import SharePlace from './src/screens/SharePlace'
 import FindPlace from './src/screens/FindPlace'
-import SlideDrawer from './src/screens/SlideDrawer'
+import SideDrawer from './src/screens/SideDrawer'
+import AuthScreen from './src/screens/AuthScreen'
 
 class Home extends Component {
   render() {
@@ -23,33 +25,40 @@ class Home extends Component {
       },
       details: {
         screen: PlaceDetail
-      }
+      },
+      auth: { screen: AuthScreen }
     })
 
     const drawer = createDrawerNavigator(
       {
-        SlideDrawer: { screen: stack }
+        SideDrawer: { screen: stack }
       },
       {
-        contentComponent: SlideDrawer,
+        contentComponent: SideDrawer,
         drawerWidth: 160
       }
     )
 
     const MainNavigator = createBottomTabNavigator({
+      sharePlace: {
+        screen: SharePlace,
+        navigationOptions: { title: 'Share Place' }
+      },
       findPlace: {
         screen: stack,
         screen: drawer,
         navigationOptions: {
           title: 'Places',
           tabBarIcon: ({ tintColor }) => {
-            return <Ionicons name="md-locate" size={30} color={tintColor} />
+            return (
+              <Ionicons
+                name={Platform.OS === 'android' ? 'md-locate' : 'ios-locate'}
+                size={30}
+                color={tintColor}
+              />
+            )
           }
         }
-      },
-      sharePlace: {
-        screen: SharePlace,
-        navigationOptions: { title: 'Share Place' }
       }
     })
 
