@@ -25,8 +25,7 @@ class Home extends Component {
       },
       details: {
         screen: PlaceDetail
-      },
-      auth: { screen: AuthScreen }
+      }
     })
 
     const drawer = createDrawerNavigator(
@@ -59,7 +58,8 @@ class Home extends Component {
             )
           }
         }
-      }
+      },
+      auth: { screen: AuthScreen }
     })
 
     AppContainer = createAppContainer(MainNavigator)

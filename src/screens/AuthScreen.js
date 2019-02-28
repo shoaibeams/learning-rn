@@ -7,10 +7,31 @@ import Heading from '../components/ui/Heading'
 import MainText from '../components/ui/MainText'
 import backgroundImage from '../../src/assets/background.jpg'
 import CustomButton from '../components/ui/CustomButton'
+import validate from '../../src/utility/validation'
 
 class AuthScreen extends Component {
   state = {
-    viewMode: Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
+    viewMode: Dimensions.get('window').height > 500 ? 'portrait' : 'landscape',
+    controls: {
+      email: {
+        value: '',
+        valid: false,
+        validationRules: { isEmail: true },
+        touched: false
+      },
+      password: {
+        value: '',
+        valid: false,
+        validationRules: { minLength: 6 },
+        touched: false
+      },
+      confirmPassword: {
+        value: '',
+        valid: false,
+        validationRules: { equalTo: 'password' },
+        touched: false
+      }
+    }
   }
   constructor(props) {
     super(props)
@@ -38,8 +59,59 @@ class AuthScreen extends Component {
     this.props.navigation.navigate('findPlace')
   }
 
+  updateInputState = (key, value) => {
+    let connectedValue = {}
+    const controls = this.state.controls
+
+    if (controls[key].validationRules.equalTo) {
+      const equalControl = controls[key].validationRules.equalTo
+      const equalValue = controls[equalControl].value
+      connectedValue = {
+        ...connectedValue,
+        equalTo: equalValue
+      }
+    }
+    if (key === 'password') {
+      connectedValue = {
+        ...connectedValue,
+        equalTo: value
+      }
+    }
+    this.setState(prevState => {
+      return {
+        controls: {
+          ...prevState.controls,
+          confirmPassword: {
+            ...prevState.controls.confirmPassword,
+            valid:
+              key === 'password'
+                ? validate(
+                    prevState.controls.confirmPassword.value,
+                    prevState.controls.confirmPassword.validationRules,
+                    connectedValue
+                  )
+                : prevState.controls.confirmPassword.valid
+          },
+          [key]: {
+            ...prevState.controls[key],
+            value,
+            valid: validate(
+              value,
+              prevState.controls[key].validationRules,
+              connectedValue
+            ),
+            touched: true
+          }
+        }
+      }
+    })
+  }
+
   render() {
     let headingText = null
+    const email = this.state.controls.email
+    const password = this.state.controls.password
+    const confirmPassword = this.state.controls.confirmPassword
 
     if (this.state.viewMode === 'portrait') {
       headingText = (
@@ -53,7 +125,14 @@ class AuthScreen extends Component {
         <View style={styles.container}>
           {headingText}
           <View style={styles.inputContainer}>
-            <Input placeholder="Email" style={styles.input} />
+            <Input
+              placeholder="Email"
+              style={styles.input}
+              value={email.value}
+              onChangeText={val => this.updateInputState('email', val)}
+              valid={email.valid}
+              touched={email.touched}
+            />
 
             <View
               style={
@@ -69,7 +148,14 @@ class AuthScreen extends Component {
                     : styles.landscapePasswordWrapper
                 }
               >
-                <Input placeholder="Password" style={styles.input} />
+                <Input
+                  placeholder="Password"
+                  style={styles.input}
+                  value={password.value}
+                  onChangeText={val => this.updateInputState('password', val)}
+                  valid={password.valid}
+                  touched={password.touched}
+                />
               </View>
               <View
                 style={
@@ -78,12 +164,27 @@ class AuthScreen extends Component {
                     : styles.landscapePasswordWrapper
                 }
               >
-                <Input placeholder="Confirm Password" style={styles.input} />
+                <Input
+                  placeholder="Confirm Password"
+                  style={styles.input}
+                  value={confirmPassword.value}
+                  onChangeText={val => this.updateInputState('confirmPassword', val)}
+                  valid={confirmPassword.valid}
+                  touched={confirmPassword.touched}
+                />
               </View>
             </View>
           </View>
           <Button title="Login" onPress={this.loginHandler} />
-          <CustomButton color="#29aaf4" onPress={this.loginHandler}>
+          <CustomButton
+            color="#29aaf4"
+            onPress={this.loginHandler}
+            disabled={
+              !confirmPassword.valid ||
+              !confirmPassword.valid ||
+              !confirmPassword.valid
+            }
+          >
             Submit
           </CustomButton>
         </View>
